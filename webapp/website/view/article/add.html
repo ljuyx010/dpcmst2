@@ -13,6 +13,7 @@
 	<link rel="stylesheet" type="text/css" href="__PUBLIC__/css/plugins/webuploader/webuploader.css">
     <link rel="stylesheet" type="text/css" href="__PUBLIC__/css/demo/webuploader-demo.min.css">
 	<link rel="stylesheet" href="__PUBLIC__/css/diy.css" />
+	<link rel="stylesheet" href="__PUBLIC__/js/plugins/webuploader/css/fileinput.css" />
 	<link rel="stylesheet" href="__PUBLIC__/kindeditor/themes/default/default.css" />
 </head>
 
@@ -52,7 +53,7 @@
                                 <label class="col-sm-2 control-label">图库</label>
 
                                 <div class="col-sm-10">
-                                    <button  id="buttonShow" type="button" class="btn btn-success"  data-toggle="modal" data-target="#upload" >上传图片</button>
+                                    <button  id="buttonShow" type="button" class="btn btn-success"  data-toggle="modal" data-target="#modal-webuploader">上传图片</button>
                                     <span class="help-block m-b-none">最多支持10张图片（双击图片可设置封面图）</span>
                                     <div id="formimageshow"></div>
                                 </div>
@@ -85,29 +86,28 @@
             </div>
         </div>
     </div>
-    <div class="modal inmodal" id="upload" tabindex="-1" role="dialog"  aria-hidden="true">
+    <div class="modal inmodal" id="modal-webuploader" tabindex="-1" role="dialog"  aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content animated fadeIn">
                 <div class="modal-body">
                     <div class="page-container">
-                        <div id="uploader" class="wu-example">
-                            <div class="queueList">
-                                <div id="dndArea" class="placeholder">
-                                    <div id="filePicker"></div>
-                                    <p>或将照片拖到这里，单次最多可选10张</p>
-                                </div>
+                        <div class="modal-body tab-content">
+                            <div role="tabpanel" class="tab-pane network" id="network">
+
+
                             </div>
-                            <div class="statusBar" style="display:none;">
-                                <div class="info"></div>
-                                <div class="progress">
-                                    <span class="text">0%</span>
-                                    <span class="percentage"></span>
+
+                            <div role="tabpanel" class="tab-pane upload active" id="upload">
+                                <div id="uploader" class="uploader">
+                                    <form enctype="multipart/form-data">
+                                        <input id="file-0" class="file" type="file" multiple data-min-file-count="1">
+                                        <br>
+
+                                    </form>
                                 </div>
-                                <div class="btns">
-                                    <div id="filePicker2"></div>
-                                    <div class="uploadBtn" id="start">开始上传</div>
-                                </div>
+
                             </div>
+
                         </div>
                     </div>
                 </div>
@@ -119,8 +119,9 @@
     <script src="__PUBLIC__/js/plugins/iCheck/icheck.min.js"></script>
 	<script src="__PUBLIC__/kindeditor/kindeditor-all.js"></script>
 	<script src="__PUBLIC__/kindeditor/lang/zh-CN.js"></script>
-	 <script type="text/javascript">
-        var BASE_URL = '__PUBLIC__js/plugins/webuploader/index.html';
+	<script src="__PUBLIC__/js/plugins/webuploader/js/fileinput.js"></script>
+	<script src="__PUBLIC__/js/plugins/webuploader/js/fileinput_locale_zh.js"></script>
+    <script type="text/javascript">
 		var url="{:url('common/upload')}";
     </script>
 	<script src="__PUBLIC__/js/plugins/webuploader/webuploader.min.js"></script>

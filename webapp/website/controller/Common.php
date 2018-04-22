@@ -1,33 +1,40 @@
 <?php
 namespace app\website\controller;
 use think\Controller;
-use org\Upload;
+use think\Db;
 
 class Common extends Controller{
-	
+
 	public function upload (){
-		//dump(input('param.'));die;
-		$uproot= 'upload/';
-		$upload = new  \org\Upload();// 实例化上传类
-		$upload->maxSize   =     3145728 ;// 设置附件上传大小
-		$upload->exts      =     array('jpg', 'gif', 'png', 'jpeg');// 设置附件上传类型
-		$upload->saveExt  = 'jpg'; //设置保存后缀
-		$upload->rootPath  =    './'. $uproot;  // 设置附件上传目录    // 上传文件
-		$upload->saveName=time().rand(1111,9999);
-		$date=date("Y-m-d",time());//已上传日期为子目录名
-		$info   =   $upload->upload();
-		if(!$info) {// 上传错误提示错误信息
-
-			$this->error($upload->getError());
-
-		}else{// 上传成功
-			//$m=db(images);
-			$data['filepath']=ROOT .$uproot.$date.'/'.$upload->saveName.'.'.$upload->saveExt;
-			//$result=$m->add($data);
-			$file=['id'=>1,'imagepath'=>$data['filepath']];
-			echo json_encode($file);
-
+		$file=request()->file('file_data');
+		$rootpath ='./upload/';
+		$date=date("Ymd",time());
+		$saveName=time().rand(1111,9999);
+		$image = \think\Image::open($file);
+		$width = $image->width(); // 返回图片的宽度
+		$height = $image->height(); // 返回图片的高度
+		if($file){
+			$info = $file->move($rootpath);
+			if($info){
+				// 成功上传后 获取上传信息
+				$path= $info->getFilename();
+				$img['imagepath']= ROOT .'upload/'.$date.'/'.$path;
+			}else{
+				// 上传失败获取错误信息
+				$img['error']=$file->getError();
+			}
 		}
+		if($width>=800||$height>=600){
+			$image->thumb($width/2, $height/2)->save($rootpath.$date.'/thumb'.$saveName.'.jpg');
+			$img['thumb']= ROOT .'upload/'.$date.'/thumb'.$saveName.'.jpg';
+		}else{
+			$img['thumb'] = $img['imagepath'];
+		}
+		//图片添加水印
+		//$image->water('./logo.png',\think\Image::WATER_SOUTHEAST)->save($rootpath.$date.'/'.$path); // 图片水印
+		//$image->text('水印文字内容','./public/static/Admin/fonts/glyphicons-halflings-regular.ttf',20,'#ffffff')->save($rootpath.$date.'/'.$path); //文字水印
+		//$img['id']=Db('images')->insertGetId($img);
+		echo json_encode($img);
 	}
 	
 }
