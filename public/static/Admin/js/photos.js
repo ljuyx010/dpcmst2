@@ -1,6 +1,6 @@
 // 图片上传
 function deleteImage(id){
-	$.ajax({
+	/*$.ajax({
 		url:'{:url("common/delimg")}',
 		type:'get',
 		data:{id:id},
@@ -9,7 +9,7 @@ function deleteImage(id){
 			if(data==1){
 				$('#imageDelete'+id).remove();
 				var imagepath=$('input[class=imagepath]');
-				if(imagepath.length<4){
+				if(imagepath.length<10){
 
 					$('#buttonShow').removeAttr("disabled");
 				}else{
@@ -20,7 +20,8 @@ function deleteImage(id){
 			}
 		}
 
-	})
+	})*/
+	$('.close').parent().remove();
 
 }
 
@@ -51,7 +52,6 @@ function initFileInput(ctrlName, uploadUrl) {
 			key: 101,
 			success: function() {
 
-
 			}
 		}
 
@@ -63,18 +63,15 @@ function initFileInput(ctrlName, uploadUrl) {
 }
 $("#file-0").on("fileuploaded", function (event, data, previewId, index) {
 
-	var div=$('<div class="input-group " id="imageDelete'+data.response['id']+'" style="margin-top:.5em;margin-right:2em; float:left;"><input type="hidden" name="imagepath[]" class="imagepath" value="'+data.response['id']+'"/><img src="'+data.response['imagepath']+'"; class="img-responsive img-thumbnail" width="150"><a class="close" style="position:absolute; top: 0px; right: 0;background: #ff0000;" title="删除这张图片" onclick="deleteImage('+data.response['id']+')">×</a></div>');
+	var div=$('<div class="input-group " id="imageDelete'+data.response['id']+'" style="margin-top:.5em;margin-right:2em; float:left;"><input type="hidden" name="thumb[]" class="imagepath" value="'+data.response['id']+'"/><img src="'+data.response['thumb']+'"; class="img-responsive img-thumbnail" width="150"><a class="close" style="position:absolute; top: 0px; right: 0;background: #ff0000;" title="删除这张图片" onclick="deleteImage('+data.response['id']+')">×</a></div>');
 	$('#formimageshow').after(div);
 	var imagepath=$('input[class=imagepath]');
-	if(imagepath.length>=4){
-
+	if(imagepath.length>=10){
 		$('#buttonShow').attr("disabled","disabled");//禁用上传按钮
-		$("#modal-webuploader").fadeIn();//关闭上传
-		$("#modal-webuploader").fadeOut('slow');
 	}else{
-
+		//$(".file-preview-thumbnails").remove();
 	}
-
+	$("#modal-webuploader").modal('hide');
 
 
 });
@@ -84,6 +81,6 @@ KindEditor.ready(function(K) {
 		allowFileManager : true,
 		langType : 'zh-CN',
 		autoHeightMode : true,
-		uploadJson: url, 
+		uploadJson: url,
 	});
 });

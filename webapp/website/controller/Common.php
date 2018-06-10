@@ -6,7 +6,18 @@ use think\Db;
 class Common extends Controller{
 
 	public function upload (){
-		$file=request()->file('file_data');
+		if(	$file=request()->file('file_data')){
+			$json = $this->movefile($file);
+		}
+		if($file=request()->file('imgFile')){
+			$img = $this->movefile($file);
+			$json=array('error'=>0,'url'=>$img['imagepath']);
+		}
+
+		echo json_encode($json);
+	}
+
+	public function movefile($file){
 		$rootpath ='./upload/';
 		$date=date("Ymd",time());
 		$saveName=time().rand(1111,9999);
@@ -34,7 +45,6 @@ class Common extends Controller{
 		//$image->water('./logo.png',\think\Image::WATER_SOUTHEAST)->save($rootpath.$date.'/'.$path); // 图片水印
 		//$image->text('水印文字内容','./public/static/Admin/fonts/glyphicons-halflings-regular.ttf',20,'#ffffff')->save($rootpath.$date.'/'.$path); //文字水印
 		//$img['id']=Db('images')->insertGetId($img);
-		echo json_encode($img);
+		return $img;
 	}
-	
 }
